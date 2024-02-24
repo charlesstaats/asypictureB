@@ -1397,7 +1397,7 @@ settings.prc = false;
             {\deletefile{\@asypicturename.pdf}}{}%
         \IfFileExists{\@asypicturename.eps}%
             {\deletefile{\@asypicturename.eps}}{}%
-        \copyfile{\@tempasyfile.asy}{\@asypicturename.asy}
+        \copyfile{\@tempasyfile.asy}{\@asypicturename.asy}%
         \ASYPIC@runasy%
     \fi%
     \asyset{graphic options}%
