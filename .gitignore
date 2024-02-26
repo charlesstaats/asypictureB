@@ -11,3 +11,9 @@
 /asypictureB.synctex.gz
 /asypictureB.toc
 /asypictureB-compile_asy.sh
+
+# latexmk auxiliary files
+/asypictureB.fdb_latexmk
+/asypictureB.fls
+/asypictureB.ilg
+/asypictureB.ind
