@@ -238,9 +238,10 @@ settings.prc = false;
             \g@addto@macro\@asyerrormessage{^^J}%
             %Next: Need to process \@asyerrorfirstline to figure
             %out the Asymptote file line number
-            \expandafter\def\expandafter\@asy@processerrorline%
-              \expandafter##\expandafter1\@asypicturename.asy:%
-               ##2.##3\relax{\xdef\@asy@errorline{\numexpr##2\relax}}%
+            \expandafter\long\expandafter\def\expandafter%
+              \@asy@processerrorline\expandafter##\expandafter1%
+              \@asypicturename.asy: ##2.##3\relax{%
+                \xdef\@asy@errorline{\numexpr##2\relax}}%
             {\expandafter\expandafter\expandafter%
                 \@asy@processerrorline\expandafter%
                 \@asyerrorfirstline\@asypicturename.asy: -5.\relax%
