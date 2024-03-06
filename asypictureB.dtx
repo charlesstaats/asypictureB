@@ -1089,7 +1089,6 @@ and the derived files           asypictureB.ins,
 \RequirePackage{graphicx}
 \RequirePackage{pgfkeys}
 
-
 \makeatletter
 
 \def\asy@OutFile{\FV@OutFile}
@@ -1100,16 +1099,16 @@ and the derived files           asypictureB.ins,
     \def\ASYPIC@shell{18}
     \newcommand{\shell@execute}{\immediate\write\ASYPIC@shell}
 \else
-	\newwrite\ASYPIC@shell
-	\ifwindows
-	    \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
-	\else
-	    \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
-	\fi
-	\newcommand{\shell@execute}[1]{{%
-		\edef\temp{#1}%
+    \newwrite\ASYPIC@shell
+    \ifwindows
+        \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
+    \else
+        \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
+    \fi
+    \newcommand{\shell@execute}[1]{{%
+        \edef\temp{#1}%
         \write\expandafter\ASYPIC@shell\expandafter{\temp}%
-	}}
+    }}
 \fi
 
 \ifshellescape
@@ -1134,7 +1133,6 @@ and the derived files           asypictureB.ins,
         \shell@execute{rm #1}%
     \fi%
 }
-
 
 \newcommand{\asyset}[1]{\pgfqkeys{/asy}{#1}}
 \newcommand{\@asyerrorfilename}{\@asypicturename_errors.txt}
@@ -1173,7 +1171,6 @@ and the derived files           asypictureB.ins,
 \asyset{angle/.style = {set graphic option = {\def\asy@angle{#1}}},
     angle/.value required}
 
-
 \newcommand{\getfontsize}{\f@size}
 
 \newif\ifasyfilechanged
@@ -1187,9 +1184,7 @@ and the derived files           asypictureB.ins,
 \newcommand{\AsyCompileIfNecessary}{\ASYPIC@flushfalse}
 \AsyCompileIfNecessary
 
-
 \newcommand\clearasyheader{\def\ASYPIC@header{}}
-
 
 \def\ASYPIC@header{}
 
@@ -1204,7 +1199,7 @@ and the derived files           asypictureB.ins,
          \FV@DefineTabOut
          \def\FV@ProcessLine##1{\g@addto@macro\ASYPIC@header{##1^^J}}%
          \let\FV@FontScanPrep\relax
-         %% DG/SR modification begin - May. 18, 1998 
+         %% DG/SR modification begin - May. 18, 1998
          %% (to avoid problems with ligatures)
          \let\@noligs\relax
          %% DG/SR modification end
@@ -1238,7 +1233,7 @@ settings.prc = false;
         \edef\ASYPIC@current@num{\csname\tempmacroname\endcsname}%
     \else%% This is the first time this name is being used.
         \edef\@asypicturename%
-            {\scantokens\expandafter{\jobname\noexpand}-#1}%  
+            {\scantokens\expandafter{\jobname\noexpand}-#1}%
         \expandafter\gdef\csname\tempmacroname\endcsname{1}%
     \fi%
     \xdef\asylistingfile{\@asypicturename.asy}
@@ -1337,7 +1332,7 @@ settings.prc = false;
             }%
             \closein\@asyreadold%
             \g@addto@macro\@asyerrormessage{^^J}%
-            %Next: Need to process \@asyerrorfirstline to figure 
+            %Next: Need to process \@asyerrorfirstline to figure
             %out the Asymptote file line number
             \expandafter\long\expandafter\def\expandafter%
               \@asy@processerrorline\expandafter##\expandafter1%
@@ -1346,7 +1341,7 @@ settings.prc = false;
             {\expandafter\expandafter\expandafter%
                 \@asy@processerrorline\expandafter%
                 \@asyerrorfirstline\@asypicturename.asy: -5.\relax%
-            }%  The surrounding braces should prevent too much from 
+            }%  The surrounding braces should prevent too much from
              %  being gobbled in case the pattern doesn't match.
             \openin\@asyreadold\@asypicturename.asy\relax%
             \edef\numlinesout{5}
@@ -1372,11 +1367,11 @@ settings.prc = false;
             }%
             \closein\@asyreadold%
             \PackageError{asypictureB}{\@asyerrormessage}{%
-                The Asymptote run described above 
+                The Asymptote run described above
                 gave a non-empty error log. I have^^J
-                reproduced the error log and attempted 
+                reproduced the error log and attempted
                 to print the five lines leading^^J
-                up to the error. Press enter or return 
+                up to the error. Press enter or return
                 to continue, and then fix your^^J
                 Asymptote code when this run is done.
             }%

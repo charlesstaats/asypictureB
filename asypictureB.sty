@@ -29,16 +29,16 @@
     \def\ASYPIC@shell{18}
     \newcommand{\shell@execute}{\immediate\write\ASYPIC@shell}
 \else
-\newwrite\ASYPIC@shell
-\ifwindows
-    \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
-\else
-    \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
-\fi
-\newcommand{\shell@execute}[1]{{%
-\edef\temp{#1}%
+    \newwrite\ASYPIC@shell
+    \ifwindows
+        \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
+    \else
+        \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
+    \fi
+    \newcommand{\shell@execute}[1]{{%
+        \edef\temp{#1}%
         \write\expandafter\ASYPIC@shell\expandafter{\temp}%
-}}
+    }}
 \fi
 
 \ifshellescape
