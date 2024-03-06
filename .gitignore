@@ -1,5 +1,6 @@
 /*.asy
 /*_errors.txt
+!/asyerrorexample-*_errors.txt
 /asypictureB-*.pdf
 /asypictureB-*.png
 *.aux
