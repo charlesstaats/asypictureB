@@ -219,19 +219,19 @@ settings.prc = false;
     \shell@execute{asy -noV \@asypicturename.asy 2> \@asyerrorfilename}%
     \openin\@asyreadold=\@asyerrorfilename\relax%
     \ifeof\@asyreadold%
-        \closein\@asyreadold%
+        \closein\@asyreadold% Error log does not exist.
     \else%
         \def\@asyerrormessage{^^JPossible Asymptote error:^^J}%
-        %Next: Need to process line of log file to figure
-        %out the Asymptote file line number
-        \expandafter\long\expandafter\def\expandafter%
+        %Create command to process line of log file to figure
+        %out the Asymptote file line number:
+        \expandafter\def\expandafter%
             \@asy@processerrorline\expandafter##\expandafter1%
             \@asypicturename.asy: ##2.##3:\relax{%
             \xdef\@asy@errorlinenumber{\numexpr##2\relax}}%
         %
         \gdef\@asy@errorlinenumber{-5}%
         {%
-            \endlinechar=`^^J%
+            \endlinechar=-1%
             \loop\unless\ifeof\@asyreadold%
                 \read\@asyreadold to \@asyerrorcurrentline%
                 \ifnum\@asy@errorlinenumber=-5%

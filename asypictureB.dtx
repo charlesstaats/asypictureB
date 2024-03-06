@@ -491,7 +491,7 @@ and the derived files           asypictureB.ins,
 % 
 % \begin{warning}
 % If \packagename{asypictureB} determines that the contents of an |asypicture|
-% environment named \meta{picturname} 
+% environment named \meta{picturename} 
 % have changed since the last run, it will delete 
 % all of the following files that exist:
 % \begin{Verbatim}[gobble=2,commandchars=\\\{\}]
@@ -722,12 +722,12 @@ and the derived files           asypictureB.ins,
 % If this file is saved as \texttt{asyerrorexample.tex} and then 
 % compiled with the shell-escape option, the following error results:
 % \begin{Verbatim}[gobble=2]
-% ./asyerrorexample.tex:13: Package asypicture Error: 
+% ! Package asypictureB Error: 
 % Possible Asymptote error:
-% asyerrorexample-error_example.asy: 10.5: syntax error 
+% draw(l1, dotted);
+% ^
+% asyerrorexample-error_example.asy: 10.5: syntax error
 % error: could not load module 'asyerrorexample-error_example.asy'
-% 
-% 
 % 
 % 6     size(5cm, 0);
 % 7     path l1 = (0,0) -- (1,1);
@@ -736,16 +736,16 @@ and the derived files           asypictureB.ins,
 % 10     draw(l1, dotted);
 % .
 % 
-% See the asypicture package documentation for explanation.
+% See the asypictureB package documentation for explanation.
 % Type  H <return>  for immediate help.
-%  ...                                              
-%                                                    
+%     ...                                              
+%                                                     
 % l.13 \end{asypicture}
 % \end{Verbatim}
-% The first two lines of the \LaTeX\ error message identifies that the 
-% |asypicture| environment ending on line 13 may have produced an error.
-% The next two lines are the Asymptote error log: they explain that this 
-% was, in fact, a syntax error. Looking at the five lines displayed, 
+% The \LaTeX\ error message first repeats the Asymptote error log,
+% which explains that there was a syntax error. Next, the five lines
+% leading up to the error are displayed.
+% Looking at these five lines, 
 % one can determine that the difficulty was a comma omitted 
 % on line 9 of the Asympote file. (It is diagnosed on line 10 because 
 % of how the compiler works.) Looking at the context, this corresponds 
@@ -1315,19 +1315,19 @@ settings.prc = false;
     \shell@execute{asy -noV \@asypicturename.asy 2> \@asyerrorfilename}%
     \openin\@asyreadold=\@asyerrorfilename\relax%
     \ifeof\@asyreadold%
-        \closein\@asyreadold%
+        \closein\@asyreadold% Error log does not exist.
     \else%
         \def\@asyerrormessage{^^JPossible Asymptote error:^^J}%
-        %Next: Need to process line of log file to figure
-        %out the Asymptote file line number
-        \expandafter\long\expandafter\def\expandafter%
+        %Create command to process line of log file to figure
+        %out the Asymptote file line number:
+        \expandafter\def\expandafter%
             \@asy@processerrorline\expandafter##\expandafter1%
             \@asypicturename.asy: ##2.##3:\relax{%
             \xdef\@asy@errorlinenumber{\numexpr##2\relax}}%
         %
         \gdef\@asy@errorlinenumber{-5}%
         {%
-            \endlinechar=`^^J%
+            \endlinechar=-1%
             \loop\unless\ifeof\@asyreadold%
                 \read\@asyreadold to \@asyerrorcurrentline%
                 \ifnum\@asy@errorlinenumber=-5%
