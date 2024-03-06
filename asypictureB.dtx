@@ -659,14 +659,16 @@ and the derived files           asypictureB.ins,
 % \texttt{\meta{filename}-\meta{picturename}\_errors.txt}.
 % \end{quote}
 % Once the Asymptote run is complete, it checks whether the error file 
-% has any content. If so, it throws a \LaTeX\ package error and displays 
+% has any lines of the form
+% \begin{quote}
+% \texttt{\meta{filename}-\meta{picturename}.asy:\meta{number}.\meta{stuff}}
+% \end{quote}
+% If so, it throws a \LaTeX\ package error and displays 
 % the contents of the error file, which include all the errors and 
-% warnings issued by Asymptote. One unfortunate 
-% consequence of this procedure is that 
-% a warning by Asymptote will be translated into a full-fledged error, 
-% which is why the \LaTeX\ error message begins with the words 
-% ``Possible Asymptote error."
-% 
+% warnings issued by Asymptote. Note that if some kind of asy error occurs
+% that does not match this output form, \packagename{asypictureB} will not
+% notice the error.
+%
 % The \LaTeX\ error message will give the line number of the 
 % |\end{asypicture}| command for the |asypicture| that caused the error, which 
 % is of limited use in isolating the error.
@@ -680,15 +682,12 @@ and the derived files           asypictureB.ins,
 % error log and print out the five lines leading up to the error.  More precisely, 
 % it does the following:
 % \begin{enumerate}
-% \item If the first line of the error log is of the form
+% \item From the first line of the form
 % \begin{quote}
 % \texttt{\meta{filename}-\meta{picturename}.asy:\meta{number}.\meta{stuff}}
 % \end{quote}
-% then the \meta{number} is extracted. If the first line is not of this 
-% form, then the parsing is considered to have failed. As a consequence, 
-% if the first line of the error log is a warning but an error shows up 
-% later, \packagename{asypictureB} will not notice the error message.
-% In the author's experience, this problem does occur, but not often.
+% the \meta{number} is extracted. Note that if no successful extraction occurs,
+% there will be no \LaTeX\ error.
 % \item Assuming \meta{number} was extracted successfully, the lines 
 % of the |asy| file from 
 % the inclusive range $\meta{number}-5$ to \meta{number} are displayed
@@ -723,7 +722,6 @@ and the derived files           asypictureB.ins,
 % compiled with the shell-escape option, the following error results:
 % \begin{Verbatim}[gobble=2]
 % ! Package asypictureB Error: 
-% Possible Asymptote error:
 % draw(l1, dotted);
 % ^
 % asyerrorexample-error_example.asy: 10.5: syntax error
@@ -1317,7 +1315,7 @@ settings.prc = false;
     \ifeof\@asyreadold%
         \closein\@asyreadold% Error log does not exist.
     \else%
-        \def\@asyerrormessage{^^JPossible Asymptote error:^^J}%
+        \def\@asyerrormessage{^^J}%
         %Create command to process line of log file to figure
         %out the Asymptote file line number:
         \expandafter\def\expandafter%
