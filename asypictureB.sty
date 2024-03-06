@@ -222,44 +222,44 @@ settings.prc = false;
         \closein\@asyreadold%
     \else%
         \def\@asyerrormessage{^^JPossible Asymptote error:^^J}%
-        \read\@asyreadold to \@asyerrorfirstline%
-        \g@addto@macro\@asyerrormessage{\@asyerrorfirstline^^J}%
-        \ifeof\@asyreadold%
-            \closein\@asyreadold%
+        %Next: Need to process line of log file to figure
+        %out the Asymptote file line number
+        \expandafter\long\expandafter\def\expandafter%
+            \@asy@processerrorline\expandafter##\expandafter1%
+            \@asypicturename.asy: ##2.##3:\relax{%
+            \xdef\@asy@errorlinenumber{\numexpr##2\relax}}%
+        %
+        \gdef\@asy@errorlinenumber{-5}%
+        {%
+            \endlinechar=`^^J%
+            \loop\unless\ifeof\@asyreadold%
+                \read\@asyreadold to \@asyerrorcurrentline%
+                \ifnum\@asy@errorlinenumber=-5%
+                {\expandafter\expandafter\expandafter%
+                 \@asy@processerrorline\expandafter%
+                 % Suffix provides default of -5:
+                 \@asyerrorcurrentline\@asypicturename.asy: -5.1:\relax}%
+                \fi%
+                \expandafter\g@addto@macro\expandafter\@asyerrormessage%
+                \expandafter{\@asyerrorcurrentline^^J}%
+            \repeat%
+        }%
+        \closein\@asyreadold%
+        \ifnum\@asy@errorlinenumber=-5%  No error
         \else%
-            {\endlinechar=`^^J%
-            \loop%
-                \readline\@asyreadold to \@asytempmessage%
-                \expandafter\g@addto@macro\expandafter%
-                  \@asyerrormessage\expandafter{\@asytempmessage^^J}%
-            \unless\ifeof\@asyreadold\repeat%
-            }%
-            \closein\@asyreadold%
-            \g@addto@macro\@asyerrormessage{^^J}%
-            %Next: Need to process \@asyerrorfirstline to figure
-            %out the Asymptote file line number
-            \expandafter\long\expandafter\def\expandafter%
-              \@asy@processerrorline\expandafter##\expandafter1%
-              \@asypicturename.asy: ##2.##3\relax{%
-                \xdef\@asy@errorline{\numexpr##2\relax}}%
-            {\expandafter\expandafter\expandafter%
-                \@asy@processerrorline\expandafter%
-                \@asyerrorfirstline\@asypicturename.asy: -5.\relax%
-            }%  The surrounding braces should prevent too much from
-             %  being gobbled in case the pattern doesn't match.
             \openin\@asyreadold\@asypicturename.asy\relax%
             \edef\numlinesout{5}
             \setcounter{@asy@linenumber}{\numlinesout}
-            \loop\ifnum\value{@asy@linenumber}<\@asy@errorline%
+            \loop\ifnum\value{@asy@linenumber}<\@asy@errorlinenumber%
                 \readline\@asyreadold to \temp%
                 \stepcounter{@asy@linenumber}%
             \repeat%
             %
-            \addtocounter{@asy@linenumber}{-\numlinesout}
+            \addtocounter{@asy@linenumber}{-\numlinesout}%
             %
             {%
                 \endlinechar=`^^J%
-                \loop\ifnum\value{@asy@linenumber}<\@asy@errorline%
+                \loop\ifnum\value{@asy@linenumber}<\@asy@errorlinenumber%
                     \stepcounter{@asy@linenumber}%
                     \edef\temp/{\arabic{@asy@linenumber}}%
                     \expandafter\g@addto@macro\expandafter%
@@ -272,11 +272,11 @@ settings.prc = false;
             \closein\@asyreadold%
             \PackageError{asypictureB}{\@asyerrormessage}{%
                 The Asymptote run described above
-                gave a non-empty error log. I have^^J
+                gave a non-empty error log. I have^^J%
                 reproduced the error log and attempted
-                to print the five lines leading^^J
+                to print the five lines leading^^J%
                 up to the error. Press enter or return
-                to continue, and then fix your^^J
+                to continue, and then fix your^^J%
                 Asymptote code when this run is done.
             }%
         \fi%
