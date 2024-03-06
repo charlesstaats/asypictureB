@@ -1,0 +1,4 @@
+    draw(l1, dotted);
+    ^
+asyerrorexample-error_example.asy: 10.5: syntax error
+error: could not load module 'asyerrorexample-error_example.asy'
