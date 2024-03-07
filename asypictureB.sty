@@ -189,8 +189,8 @@ settings.prc = false;
                       \@asyrepeatfalse%
                       \asyfilechangedtrue%
                   \else% Not at the end of either file in this case
-                      \read\@asyreadold to \oldfileline%
-                      \read\@asyreadnew to \newfileline%
+                      \readline\@asyreadold to \oldfileline%
+                      \readline\@asyreadnew to \newfileline%
                       \ifx\oldfileline\newfileline%
                           \@asyrepeattrue%
                       \else
