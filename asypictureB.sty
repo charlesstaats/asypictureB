@@ -138,13 +138,13 @@ settings.prc = false;
     \ifcsname\tempmacroname\endcsname%% if \ASYPIC@name@... is defined
         \edef\oldnum{\csname\tempmacroname\endcsname}%
         \edef\@asypicturename%
-            {\scantokens\expandafter{\jobname\noexpand}-#1__\oldnum}%
+            {\jobname-#1__\oldnum}%
         \expandafter\xdef\csname\tempmacroname\endcsname%
             {\the\numexpr\oldnum+1\relax}%
         \edef\ASYPIC@current@num{\csname\tempmacroname\endcsname}%
     \else%% This is the first time this name is being used.
         \edef\@asypicturename%
-            {\scantokens\expandafter{\jobname\noexpand}-#1}%
+            {\jobname-#1}%
         \expandafter\gdef\csname\tempmacroname\endcsname{1}%
     \fi%
     \xdef\asylistingfile{\@asypicturename.asy}
@@ -224,21 +224,21 @@ settings.prc = false;
         \def\@asyerrormessage{^^J}%
         %Create command to process line of log file to figure
         %out the Asymptote file line number:
-        \expandafter\def\expandafter%
-            \@asy@processerrorline\expandafter##\expandafter1%
-            \@asypicturename.asy: ##2.##3:\relax{%
+        \edef\@asy@temp{%
+            \def\noexpand\@asy@processerrorline####1\detokenize\expandafter{\@asypicturename.asy:}}%
+        \@asy@temp##2.##3:\relax{%
             \xdef\@asy@errorlinenumber{\numexpr##2\relax}}%
         %
         \gdef\@asy@errorlinenumber{-5}%
         {%
             \endlinechar=-1%
             \loop\unless\ifeof\@asyreadold%
-                \read\@asyreadold to \@asyerrorcurrentline%
+                \readline\@asyreadold to \@asyerrorcurrentline%
                 \ifnum\@asy@errorlinenumber=-5%
                 {\expandafter\expandafter\expandafter%
                  \@asy@processerrorline\expandafter%
                  % Suffix provides default of -5:
-                 \@asyerrorcurrentline\@asypicturename.asy: -5.1:\relax}%
+                 \@asyerrorcurrentline\detokenize\expandafter{\@asypicturename.asy:} -5.1:\relax}%
                 \fi%
                 \expandafter\g@addto@macro\expandafter\@asyerrormessage%
                 \expandafter{\@asyerrorcurrentline^^J}%
