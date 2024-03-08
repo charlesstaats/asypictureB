@@ -225,7 +225,10 @@ settings.prc = false;
         %Create command to process line of log file to figure
         %out the Asymptote file line number:
         \edef\@asy@temp{%
-            \def\noexpand\@asy@processerrorline####1\detokenize\expandafter{\@asypicturename.asy:}}%
+            \def\noexpand\@asy@processerrorline####1\detokenize\expandafter{%
+                \@asypicturename.asy:%
+            }%
+        }%
         \@asy@temp##2.##3:\relax{%
             \xdef\@asy@errorlinenumber{\numexpr##2\relax}}%
         %
@@ -238,7 +241,9 @@ settings.prc = false;
                 {\expandafter\expandafter\expandafter%
                  \@asy@processerrorline\expandafter%
                  % Suffix provides default of -5:
-                 \@asyerrorcurrentline\detokenize\expandafter{\@asypicturename.asy:} -5.1:\relax}%
+                 \@asyerrorcurrentline\detokenize\expandafter%
+                     {\@asypicturename.asy:} -5.1:\relax%
+                }%
                 \fi%
                 \expandafter\g@addto@macro\expandafter\@asyerrormessage%
                 \expandafter{\@asyerrorcurrentline^^J}%
