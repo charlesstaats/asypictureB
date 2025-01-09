@@ -11,7 +11,7 @@ on:
   push:
     branches: 
       # - "*"
-      - "workflow"
+      - "*workflow"
   pull_request:
     branches: 
       - "*"
