@@ -1,0 +1,17 @@
+\input regression-test.tex\relax
+\documentclass{article}
+\usepackage{asypictureB}
+\begin{document}
+\def\asywidth{5cm}
+\START
+\begin{asypicture}{name=error_example}
+  // A comment
+  size(@asywidth, 0);
+  path l1 = (0,0) -- (1,1);
+  // Another comment
+  draw(box((0,0),(1,1)))
+  draw(l1, dotted);
+  draw(l2, dashed);
+\end{asypicture}
+\END
+\end{document}
