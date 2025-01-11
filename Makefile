@@ -1,4 +1,12 @@
-all: asypictureB.sty asypictureB.pdf asyerrorexample-error_example_errors.txt asypictureb.zip
+all: sty pdf error_example
+
+sty: asypictureB.sty
+
+pdf: asypictureB.pdf
+
+zip: asypictureb.zip
+
+error_example: asyerrorexample-error_example_errors.txt
 
 asypictureB.sty: asypictureB.ins asypictureB.dtx
 	tex asypictureB.ins
