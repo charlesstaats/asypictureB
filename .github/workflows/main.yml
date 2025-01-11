@@ -98,18 +98,26 @@ jobs:
         if: runner.os == 'Windows'
         # https://www.scivision.dev/github-actions-path-append/
         run: echo "${HOME}/texlive/bin/windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - name: Run checks
-        run: "l3build check"
+      - name: "Print current path: Linux"
+        if: runner.os != 'Windows'
+        run: pwd
+      - name: "Print current path: win"
+        if: runner.os == 'Windows'
+        run: echo %cd%
+      - name: Run without shell-escape
+        run: pdflatex foo.tex
+      # - name: Run checks
+      #   run: "l3build check"
       # - name: Create doc
       #   run: "l3build doc"
-      - name: Archive failed test output
-      # run even if previous step failed
-        if: ${{ always() }}
-        uses: zauguin/l3build-failure-artifacts@v1
-        with:
-          name: testfiles-${{ matrix.sys }}
-          # Decide how long to keep the test output artefact:
-          retention-days: 7
+      # - name: Archive failed test output
+      # # run even if previous step failed
+      #   if: ${{ always() }}
+      #   uses: zauguin/l3build-failure-artifacts@v1
+      #   with:
+      #     name: testfiles-${{ matrix.sys }}
+      #     # Decide how long to keep the test output artefact:
+      #     retention-days: 7
       # - name: Archive docs
       # dwyn o https://github.com/latex3/latex2e/blob/develop/.github/workflows/main.yaml
         # uses: actions/upload-artifact@v4
