@@ -89,13 +89,7 @@
 % included into the \TeX\ source once they do what I want.
 % \item 
 % The \packagename{asymptote} package does not support PNG files, 
-% although the Asymptote language does.\footnote{A note 
-% on why this is desirable: Asymptote's 3d capabilities are 
-% currently much better for 
-% rasterized images than for vector graphics. Thus, it is often desirable 
-% to produce a rasterized image. Because of a quirk of Asymptote, it is 
-% easy to produce high-resolution images in PNG format, but much harder 
-% to raise the resolution when the output is in the default PDF format.}
+% although the Asymptote language does.
 % \item
 % The \packagename{asymptote} package does have a mechanism in place so that 
 % when it is used with |latexmk|, Asymptote images that have not changed are 
@@ -107,10 +101,7 @@
 % \item
 % The \packagename{asymptote} package can rescale an Asymptote-produced 
 % image to a given width and/or a given height, but it cannot rescale the 
-% image by a given scaling factor.\footnote{This is relevant because a 
-% second trick for producing a high-resolution rasterized image with the 
-% Asymptote language is to produce a scaled-up PDF image, and then 
-% scale it back down when including it into the \TeX\ file.}
+% image by a given scaling factor.
 % \end{enumerate}
 % The most important issue here is the first, which can to some extent be fixed 
 % using editor features; see, for instance, 
@@ -128,8 +119,8 @@
 % \begin{enumerate}
 % \item
 % Asymptote errors are repackaged as \LaTeX\ errors and reported immediately.
-% At a minimum, the user is shown the Asymptote error log and a line number 
-% that will allow him to locate the correct Asymptote picture within the 
+% At a minimum, users are shown the Asymptote error log and a line number 
+% that will allow them to locate the correct Asymptote picture within the 
 % \TeX\ source file.
 % 
 % Additionally, \packagename{asypictureB} is usually able to display the 
@@ -171,14 +162,14 @@
 % First of all, the \packagename{asypictureB} package is mostly useless unless you 
 % have Asymptote installed on your system. 
 % \begin{itemize}
-% \item For a Mac OS X system, this installation
+% \item For a MacOS system, this installation
 % is automatic with a standard installation 
 % of \href{http://tug.org/mactex/}{MacTeX}. 
 % \item For a Windows system, the 
 % \href{http://asymptote.sourceforge.net/doc/Microsoft-Windows.html}{official 
 % installation instructions} are fairly good. As of this writing, the most 
 % recent version of the |setup.exe| file can be downloaded from 
-% \url{http://sourceforge.net/projects/asymptote/files/2.24/}.
+% \url{http://sourceforge.net/projects/asymptote/files/2.95/}.
 % \item
 % For a Unix-like system, a version of 
 % Asymptote is included in TeX Live, but there may be additional dependencies;
@@ -190,7 +181,7 @@
 % \end{itemize}
 % 
 % To use the \texttt{asypictureB} package, 
-% the \texttt{.tex} file should be run with shell-escape 
+% your \texttt{.tex} file should be run with shell-escape 
 % enabled:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex -shell-escape \meta{filename}
@@ -203,7 +194,9 @@
 % 
 % If you are unwilling to use shell-escape, \packagename{asypictureB} 
 % creates a script that makes it easy to execute the necessary commands 
-% afterwards. To use it, run the following three commands at the terminal. 
+% afterwards. To use it, run the following four commands at the terminal. 
+% (The second command is optional; it allows you to inspect the script
+% before running it.)
 % For convenience, it is assumed that the name of the \LaTeX\ source file 
 % is |foo.tex|.
 % 
@@ -212,15 +205,17 @@
 % Windows:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex foo
+% type foo-asy_compile.bat
 % foo-asy_compile.bat
 % pdflatex foo
 % \end{Verbatim}
 % \end{minipage}
 % \hfill
 % \begin{minipage}{0.48\linewidth}
-% Mac OS X and Unix-like systems:
+% MacOS and Unix-like systems:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex foo
+% cat foo-asy_compile.sh
 % sh foo-asy_compile.sh
 % pdflatex foo
 % \end{Verbatim}
@@ -237,7 +232,8 @@
 % Asymptote pictures which have been compiled at some point in the past, even 
 % if they have since been altered, will 
 % not be recompiled. Should this happen, you can force every |asypicture| 
-% to be recompiled using the |\RequireAsyRecompile| command.
+% to be recompiled by temporarily adding the |\RequireAsyRecompile| command
+% before your first |asypicture|.
 % \end{warning}
 % 
 % \paragraph{The safer method}
@@ -618,7 +614,7 @@
 % \begin{Verbatim}[gobble=2,numbers=left,tabsize=4]
 % \documentclass{article}
 % \usepackage{asypictureB}
-%  \begin{document}
+% \begin{document}
 % \def\asywidth{5cm}
 % \begin{asypicture}{name=error_example}
 % 	// A comment
@@ -673,7 +669,10 @@
 % also used in the \LaTeX\ code to avoid hard-coding numbers. 
 % However, it was almost immediately apparent that this feature 
 % has more sophistocated uses, such as allowing user-defined 
-% syntax or even creating something similar to templates. 
+% syntax or even creating something similar to templates\footnote{If you
+% actually want to use templates in Asymptote code, the experimental
+% \emph{templated imports} feature of the language is probably a
+% better choice than the macro techniques described in this section}. 
 % 
 % \subsection{Limitations}
 % 
@@ -870,7 +869,7 @@
 % same packages loaded and macros defined as in the original document. 
 % For instance, font consistency between the Asymptote images and the 
 % larger document is ensured by this option.
-% It comes with an important limitations---Asymptote cannot use size information 
+% It comes with an important limitation---Asymptote cannot use size information 
 % about the labels when this option is in use.
 % 
 % The closest 
@@ -985,6 +984,33 @@
 % \paragraph{No spaces in file names} The \packagename{asymptote} package
 % takes measures to accomodate peculiar file names---in particular, file 
 % names that include spaces. The \packagename{asypictureB} package does not.
+%
+% \paragraph{No directory specification} The \packagename{asymptote} package
+% allows the user to specify a directory in which to store the Asymptote
+% code and images. The \packagename{asypictureB} package does not currently
+% have this feature, although there is a patch by user202729 that will hopefully
+% be included in the next version. Note that neither package respects the
+% |-output-directory| commandline option.
+%
+% \paragraph{Suboptimal interaction with \texttt{latexmk}} By design, the
+% \packagename{asypictureB} package allows the image format to be specified by
+% the Asymptote code; it does not care whether a |png| or |pdf| file is produced.
+% Unfortunately, |latexmk| relies on being able to identify the generated image file
+% from the \TeX\ log file. Thus, if you use \packagename{asypictureB} with |latexmk|,
+% it will rerun Asymptote every time for |asypicture|s that produce a file format other
+% than the one expected by |latexmk|. Since \packagename{asypictureB} and |latexmk|
+% are two different solutions to the same problem, I expect most users will choose
+% one or the other. But for those who want to use them together, hopefully there will
+% be a better solution in the future.
+%
+% \section{Acknowledgements}
+%
+% The current \packagename{asypictureB} package incorporates bug fixes and improvements
+% by \href{https://github.com/user202729}{user202729}
+% (\url{https://tex.stackexchange.com/users/250119})
+% and \href{https://github.com/cfr42}{cfr}
+% (\url{https://tex.stackexchange.com/users/39222}). For more details,
+% see the \href{https://github.com/charlesstaats/asypictureB/commits/main/}{commit history on github}.
 % 
 % \StopEventually{^^A
 %    \PrintChanges
@@ -999,6 +1025,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{asypictureB}
   [2025/01/04 v0.4 user-friendly integration of Asymptote into LaTeX]
+
 \RequirePackage{fancyvrb}
 \RequirePackage{graphicx}
 \RequirePackage{pgfkeys}
@@ -1009,6 +1036,11 @@
 
 \RequirePackage{ifplatform}
 
+%    \end{macrocode}
+% Define the |\shell@execute| command. If shell escape is enabled, the
+% command executes its contents in the shell. Otherwise, the command
+% is written to a script for the user to execute.
+%    \begin{macrocode}
 \ifshellescape
     \def\ASYPIC@shell{18}
     \newcommand{\shell@execute}{\immediate\write\ASYPIC@shell}
@@ -1025,6 +1057,10 @@
     }}
 \fi
 
+%    \end{macrocode}
+% Define the |\copyfile| command, which should work regardless of whether
+% shell escape is enabled. (If shell escape is enabled, it is more efficient.)
+%    \begin{macrocode}
 \ifshellescape
     \newcommand{\copyfile}[2]{%
     \ifwindows%
@@ -1040,6 +1076,12 @@
     }
 \fi
 
+%    \end{macrocode}
+% Define the |\deletefile| command. Unlike |\copyfile|, this command will
+% have no immediate effect if shell escape is not enabled, instead writing
+% a line to the script. (If shell escape \emph{is} enabled, of course the
+% command will immediately delete the file.)
+%    \begin{macrocode}
 \newcommand{\deletefile}[1]{%
     \ifwindows%
         \shell@execute{del #1}%
@@ -1048,6 +1090,10 @@
     \fi%
 }
 
+%    \end{macrocode}
+%
+% Set up the key-value system for \packagename{asypictureB} using \packagename{pgfkeys}.
+%    \begin{macrocode}
 \newcommand{\asyset}[1]{\pgfqkeys{/asy}{#1}}
 \newcommand{\@asyerrorfilename}{\@asypicturename_errors.txt}
 \newcounter{@asy@linenumber}
@@ -1057,8 +1103,8 @@
 \asyset{graphic options/.code={}}
 \asyset{set graphic option/.style={graphic options/.append code=#1}}
 %    \end{macrocode}
-%    Unrecognized keys should be passed to the |\includegraphics| command 
-%    using |\setkeys|.
+% Unrecognized keys should be passed to the |\includegraphics| command 
+% using |\setkeys|.
 %    \begin{macrocode}
 \asyset{.unknown/.code = %
     {%
@@ -1136,6 +1182,15 @@ settings.prc = false;
 %    \begin{macrocode}
 \def\asypicture{\FV@Environment{}{asypicture}}
 
+%    \end{macrocode}
+%
+% Define the |\ASYPIC%recordname| command. As an example, |\ASYPIC@recordname@foo|
+% in the file |bar.tex| would set |\asylistingfile| to |bar-foo.asy| the first
+% time it is called. A second call to |\ASYPIC@recordname{foo}| would set
+% |\asylistingfile| to |bar-foo__1.asy|, a third to |bar-foo__2.asy|, and so on.
+% The next number to use is stored in the macro |\ASYPIC@name@foo|. (Note that this
+% is a macro, not a counter.)
+%    \begin{macrocode}
 \newcommand{\ASYPIC@recordname}[1]{%
     \edef\tempmacroname{ASYPIC@name@#1}%
     \ifcsname\tempmacroname\endcsname%% if \ASYPIC@name@... is defined
