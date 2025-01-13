@@ -149,6 +149,9 @@ jobs:
         if: runner.os == 'Windows'
         working-directory: ./tests
         run: type simple-compile_asy.txt|cmd
+      - name: Rerun after generating images
+        working-directory: ./tests
+        run: pdflatex simple
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc
