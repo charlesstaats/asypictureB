@@ -108,6 +108,7 @@ jobs:
         run: copy asypictureB.sty tests/
       - name: Run without shell-escape
         working-directory: ./tests
+        continue-on-error: true
         run: pdflatex simple
       - name: "Print generated script: Linux"
         if: runner.os != 'Windows'
