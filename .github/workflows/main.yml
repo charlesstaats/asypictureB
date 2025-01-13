@@ -117,7 +117,7 @@ jobs:
       - name: "Print generated script: win"
         if: runner.os == 'Windows'
         working-directory: ./tests
-        run: type simple-compile_asy.bat
+        run: type simple-compile_asy.txt
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc

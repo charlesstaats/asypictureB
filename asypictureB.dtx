@@ -205,8 +205,8 @@
 % Windows:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex foo
-% type foo-asy_compile.bat
-% foo-asy_compile.bat
+% type foo-asy_compile.txt
+% cmd < foo-asy_compile.txt
 % pdflatex foo
 % \end{Verbatim}
 % \end{minipage}
@@ -1047,7 +1047,7 @@
 \else
     \newwrite\ASYPIC@shell
     \ifwindows
-        \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
+        \openout\ASYPIC@shell=\jobname-compile_asy.txt\relax
     \else
         \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
     \fi
