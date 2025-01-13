@@ -93,6 +93,14 @@ jobs:
       - name: Install fake asy
         working-directory: ./tests
         run: pyinstaller --onefile --name fakeasy fake_asy.py
+      - name: "Show directory: Linux"
+        if: runner.os != 'Windows'
+        run: ls -l tests/build
+      - name: "Show directory: win"
+        if: runner.os == 'Windows'
+        run: dir tests\build
+      - name: Print path
+        run: echo "${GITHUB_PATH}"
       - name: "Link fake asy: Linux"
         if: runner.os != 'Windows'
         run: ln -s tests/build/fakeasy $HOME/bin/asy
