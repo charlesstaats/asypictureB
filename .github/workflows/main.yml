@@ -84,14 +84,18 @@ jobs:
       - name: Update system
         if: ${{ matrix.do_apt }}
         run: sudo apt-get update && sudo apt-get install ${{ matrix.do_apt }}
-      - name: Install fake asy
-        uses: sayyid5416/pyinstaller@v1
+      - name: Install python
+        uses: actions/setup-python@v5
         with:
-          spec: tests/fake_asy.py
-          options: --onefile, --name "asy",
+          python-version: '3.8'
+      - name: Install pyinstaller
+        run: python -m pip install pyinstaller
+      - name: Install fake asy
+        working-directory: ./tests
+        run: pyinstaller --onefile --name fakeasy fake_asy.py
       - name: "Link fake asy: Linux"
         if: runner.os != 'Windows'
-        run: ln -s tests/build/asy $HOME/bin/asy
+        run: ln -s tests/build/fakeasy $HOME/bin/asy
       - name: Restore TeX Live from cache
         uses: actions/cache/restore@v4
         with:
