@@ -92,18 +92,21 @@ jobs:
         run: python -m pip install pyinstaller
       - name: Install fake asy
         working-directory: ./tests
-        run: pyinstaller --onefile --name fakeasy fake_asy.py
+        run: pyinstaller --onefile --name asy fake_asy.py
       - name: "Show directory: Linux"
         if: runner.os != 'Windows'
-        run: ls -l tests/build
+        run: ls -l tests/dist
       - name: "Show directory: win"
         if: runner.os == 'Windows'
-        run: dir tests\build
+        run: dir tests\dist
       - name: Print path
         run: echo "${GITHUB_PATH}"
-      - name: "Link fake asy: Linux"
+      - name: "Add fake asy to path: Linux"
         if: runner.os != 'Windows'
-        run: ln -s tests/build/fakeasy $HOME/bin/asy
+        run: echo $PWD/tests/dist >> $GITHUB_PATH
+      - name: "Add fake asy to path: win"
+        if: runner.os == 'Windows'
+        run: echo "${PWD}\tests\dist" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Restore TeX Live from cache
         uses: actions/cache/restore@v4
         with:
@@ -142,6 +145,10 @@ jobs:
         if: runner.os != 'Windows'
         working-directory: ./tests
         run: sh simple-compile_asy.sh
+      - name: "Run generated script: win"
+        if: runner.os == 'Windows'
+        working-directory: ./tests
+        run: cmd < simple-compile_asy.txt
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc
