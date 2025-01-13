@@ -84,6 +84,14 @@ jobs:
       - name: Update system
         if: ${{ matrix.do_apt }}
         run: sudo apt-get update && sudo apt-get install ${{ matrix.do_apt }}
+      - name: Install fake asy
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          spec: tests/fake_asy.py
+          options: --onefile, --name "asy",
+      - name: "Link fake asy: Linux"
+        if: runner.os != 'Windows'
+        run: ln -s tests/build/asy $HOME/bin/asy
       - name: Restore TeX Live from cache
         uses: actions/cache/restore@v4
         with:
@@ -118,6 +126,10 @@ jobs:
         if: runner.os == 'Windows'
         working-directory: ./tests
         run: type simple-compile_asy.txt
+      - name: "Run generated script: Linux"
+        if: runner.os != 'Windows'
+        working-directory: ./tests
+        run: sh simple-compile_asy.sh
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc
