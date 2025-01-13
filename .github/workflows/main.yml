@@ -148,7 +148,7 @@ jobs:
       - name: "Run generated script: win"
         if: runner.os == 'Windows'
         working-directory: ./tests
-        run: cmd < simple-compile_asy.txt
+        run: type simple-compile_asy.txt|cmd
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc
