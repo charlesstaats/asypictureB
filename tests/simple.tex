@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage{asypictureB}
+\begin{document}
+\begin{asypicture}{name=foo,width=4cm,height=4cm}
+  size(4cm, 4cm);
+  draw((0,0)--(1,1));
+\end{asypicture}
+\begin{asypicture}{name=bar,width=4cm,height=4cm}
+  size(4cm, 4cm);
+  draw(box((0,0), (1,1)));
+\end{asypicture}
+\begin{asypicture}{name=foo,width=4cm,height=4cm}
+  size(4cm, 4cm);
+  draw(circle((0,0), 1));
+\end{asypicture}
+\end{document}

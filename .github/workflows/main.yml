@@ -105,8 +105,16 @@ jobs:
       - name: "Print current path: win"
         if: runner.os == 'Windows'
         run: dir
+      - name: Switch to tests directory
+        run: cd tests
       - name: Run without shell-escape
-        run: pdflatex foo.tex
+        run: pdflatex simple
+      - name: "Print generated script: Linux"
+        if: runner.os != 'Windows'
+        run: cat simple-compile_asy.sh
+      - name: "Print generated script: win"
+        if: runner.os == 'Windows'
+        run: type simple-compile_asy.bat
       # - name: Run checks
       #   run: "l3build check"
       # - name: Create doc
