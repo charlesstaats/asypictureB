@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-V", dest="view", action="store_true", default=False)
 parser.add_argument("-noV", dest="view", action="store_false")
 # To be added later:
-# parser.add_argument("-f", dest="format", default="svg")
+# parser.add_argument("-f", dest="format", default="pdf")
 parser.add_argument("filename")
 args = parser.parse_args()
 
@@ -25,4 +25,4 @@ if not os.path.exists(asy_filename):
 print("Running fake_asy on", asy_filename)
 sys.stderr.write("Fake warning message while processing " + asy_filename + "\n")
 
-shutil.copy("box.svg", f"{filename}.svg")
+shutil.copy("box.pdf", f"{filename}.pdf")
