@@ -205,8 +205,8 @@
 % Windows:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex foo
-% type foo-asy_compile.bat
-% foo-asy_compile.bat
+% type foo-compile_asy.txt
+% type foo-compile_asy.txt|cmd
 % pdflatex foo
 % \end{Verbatim}
 % \end{minipage}
@@ -215,8 +215,8 @@
 % MacOS and Unix-like systems:
 % \begin{Verbatim}[commandchars=\\\{\},gobble=2]
 % pdflatex foo
-% cat foo-asy_compile.sh
-% sh foo-asy_compile.sh
+% cat foo-compile_asy.sh
+% sh foo-compile_asy.sh
 % pdflatex foo
 % \end{Verbatim}
 % \end{minipage}
@@ -227,7 +227,7 @@
 % 
 % \begin{warning}
 % This method is not entirely foolproof. In particular, if |pdflatex| is run 
-% twice in a row without running the \meta{filename}-|asy_compile| 
+% twice in a row without running the \meta{filename}-|compile_asy| 
 % script in between, then 
 % Asymptote pictures which have been compiled at some point in the past, even 
 % if they have since been altered, will 
@@ -1047,7 +1047,7 @@
 \else
     \newwrite\ASYPIC@shell
     \ifwindows
-        \openout\ASYPIC@shell=\jobname-compile_asy.bat\relax
+        \openout\ASYPIC@shell=\jobname-compile_asy.txt\relax
     \else
         \openout\ASYPIC@shell=\jobname-compile_asy.sh\relax
     \fi

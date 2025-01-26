@@ -1,0 +1,153 @@
+# Derived from:
+# https://github.com/latex3/hyperref/blob/adc36adbc3650db73329469b43afb0ee86e3c807/.github/workflows/main.yaml
+# https://github.com/josephwright/siunitx/blob/main/.github/workflows/main.yaml
+
+name: Automatic Checks
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: 
+      # - "*"
+      - "*workflow"
+  pull_request:
+    branches: 
+      - "*"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  # addaswyd o https://github.com/latex3/latex2e/blob/develop/.github/workflows/main.yaml
+  # update TL tree if needed
+  texlive-cache:
+    runs-on: ${{ matrix.os }}
+    outputs:
+      cache_key_ubuntu: ${{ steps.save_key.outputs.cache_key_ubuntu }}
+      cache_key_win: ${{ steps.save_key.outputs.cache_key_win }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        # sys: [ubuntu, win]
+        include:
+          - os: ubuntu-latest
+            sys: ubuntu
+          - os: windows-latest
+            sys: win
+    name: "Update TeX Live cache: ${{ matrix.os }}"
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install TeX Live
+        id: texlive
+        uses: zauguin/install-texlive@v3
+        with:
+          # List the required TeX Live packages in a separate file to allow reuse in
+          # different workflows.
+          package_file: .github/tl_packages
+      - name: Save cache key
+        id: save_key
+        shell: bash
+        run: |
+          outkey="${{ steps.texlive.outputs.cache_key }}"
+          outid="${{ matrix.sys }}"
+          echo "cache_key_${outid}=${outkey}" >> "$GITHUB_OUTPUT"
+          cat "$GITHUB_OUTPUT"
+      
+
+  build:
+    runs-on: ${{ matrix.os }}
+    needs: texlive-cache
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            sys: ubuntu
+            do_apt: ghostscript
+            cache_key_sys: ${{ needs.texlive-cache.outputs.cache_key_ubuntu }}
+          - os: windows-latest
+            sys: win
+            cache_key_sys: ${{ needs.texlive-cache.outputs.cache_key_win }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      # https://github.com/josephwright/siunitx/blob/549cad913591b92a3a199b7477a325866303bf29/.github/workflows/main.yaml
+      - name: Update system
+        if: ${{ matrix.do_apt }}
+        run: sudo apt-get update && sudo apt-get install ${{ matrix.do_apt }}
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+      - name: Install pyinstaller
+        run: python -m pip install pyinstaller
+      - name: Install fake asy
+        working-directory: ./tests
+        run: pyinstaller --onefile --name asy fake_asy.py
+      - name: "Show directory: Linux"
+        if: runner.os != 'Windows'
+        run: ls -l tests/dist
+      - name: "Show directory: win"
+        if: runner.os == 'Windows'
+        run: dir tests\dist
+      - name: Print path
+        run: echo "${GITHUB_PATH}"
+      - name: "Add fake asy to path: Linux"
+        if: runner.os != 'Windows'
+        run: echo $PWD/tests/dist >> $GITHUB_PATH
+      - name: "Add fake asy to path: win"
+        if: runner.os == 'Windows'
+        run: echo "${PWD}\tests\dist" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Restore TeX Live from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/texlive
+          # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
+          key: ${{ matrix.cache_key_sys }}
+          fail-on-cache-miss: true
+      - name: "Set PATH: Linux"
+        if: runner.os != 'Windows'
+        run: echo $HOME/texlive/bin/x86_64-linux >> $GITHUB_PATH
+      - name: "Set PATH: win"
+        if: runner.os == 'Windows'
+        # https://www.scivision.dev/github-actions-path-append/
+        run: echo "${HOME}/texlive/bin/windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Build sty file
+        run: tex asypictureB.ins
+      - name: "Copy sty file: Linux"
+        if: runner.os != 'Windows'
+        run: cp asypictureB.sty tests/
+      - name: "Copy sty file: win"
+        if: runner.os == 'Windows'
+        run: copy asypictureB.sty tests/
+      - name: Run without shell-escape
+        working-directory: ./tests
+        continue-on-error: true
+        run: pdflatex simple
+      - name: "Print generated script: Linux"
+        if: runner.os != 'Windows'
+        working-directory: ./tests
+        run: cat simple-compile_asy.sh
+      - name: "Print generated script: win"
+        if: runner.os == 'Windows'
+        working-directory: ./tests
+        run: type simple-compile_asy.txt
+      - name: "Run generated script: Linux"
+        if: runner.os != 'Windows'
+        working-directory: ./tests
+        run: sh simple-compile_asy.sh
+      - name: "Run generated script: win"
+        if: runner.os == 'Windows'
+        working-directory: ./tests
+        run: type simple-compile_asy.txt|cmd
+      - name: Rerun after generating images
+        working-directory: ./tests
+        run: pdflatex simple
